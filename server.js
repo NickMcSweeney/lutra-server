@@ -38,7 +38,8 @@ app.use(mount("/", serve("../lutris-imaginarium/dist"))).use(mount("/users", use
 
 // start the server
 app.listen(3001, "127.0.0.1");
-console.log("Listening at port 3000");
+//app.listen(8080, "192.168.0.49");
+console.log("Listening at port 80, 192.168.0.49");
 
 // http
 //   .createServer((req, res) => {
