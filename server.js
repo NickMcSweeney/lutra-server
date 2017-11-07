@@ -1,51 +1,25 @@
-require("babel-register")({
-  plugins: ["transform-async-to-generator"],
-});
-
 const Koa = require("koa");
-const Mongo = require("mongodb");
-const http = require("http");
+const Router = require("koa-router");
+const bodyParser = require("koa-bodyparser");
+const cors = require("@koa/cors");
 const serve = require("koa-static");
 const mount = require("koa-mount");
 const assert = require("assert");
-const Mongodb = Mongo.MongoClient;
 
 const url = "mongodb://localhost:27017/lutra";
 const app = new Koa();
+const route = new Router();
 
-let myUsers = [];
-Mongodb.connect(url, function(err, db) {
-  assert.equal(null, err);
-  console.log("Connected successfully to server");
-  const users = db.collection("users");
+const myRoutes = require("./routes.js");
 
-  users.find({}).toArray(function(err, user) {
-    assert.equal(err, null);
-    console.log("Found the following users");
-    console.log(user);
-    myUsers = user;
-    return user;
-  });
+route.get("/test/", myRoutes.test);
+route.get("/readAll/", myRoutes.readFromDb);
+route.post("/add/", myRoutes.addToDb);
 
-  db.close();
-});
-async function users(ctx, next) {
-  await next();
-  ctx.body = "users: " + myUsers[0].name;
-}
-app.use(mount("/", serve("../lutris-imaginarium/dist"))).use(mount("/users", users));
-// .use(serve("../lutris-imaginarium/dist"))
+app.use(cors());
+app.use(bodyParser());
+app.use(route.routes());
 
 // start the server
 app.listen(3001, "127.0.0.1");
-//app.listen(8080, "192.168.0.49");
-console.log("Listening at port 80, 192.168.0.49");
-
-// http
-//   .createServer((req, res) => {
-//     res.writeHead(200, { "Content-Type": "text/plain" });
-//     res.end("Hello World\n");
-//   })
-//   .listen(3001, "127.0.0.1");
-//
-// console.log("Server running at http://127.0.0.1:30001/");
+console.log("Listening at port 3001, 127.0.0.1");
