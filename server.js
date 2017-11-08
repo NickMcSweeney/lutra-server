@@ -14,7 +14,9 @@ const myRoutes = require("./routes.js");
 
 route.get("/test/", myRoutes.test);
 route.get("/readAll/", myRoutes.readFromDb);
-route.post("/add/", myRoutes.addToDb);
+route.post("/createUser/", myRoutes.createUser);
+route.post("/writeDbEncrypt/", myRoutes.writeDbEncrypt);
+route.post("/writeDb/", myRoutes.addToDb);
 
 app.use(cors());
 app.use(bodyParser());

@@ -11,10 +11,9 @@ module.exports = {
     const header = inputBody.header;
     const message = inputBody.txt;
     const dbInsert = {};
-    dbInsert[header] = message;
-
-    const url = "mongodb://localhost:27017/lutra";
     try {
+      dbInsert[header] = message;
+      const url = "mongodb://localhost:27017/lutra";
       const db = await Mongodb.connect(url);
       const Lutra = db.collection("lutra");
       Lutra.insert(dbInsert);
@@ -24,15 +23,15 @@ module.exports = {
       ctx.response.status = 200;
       ctx.response.type = "application/json";
       ctx.response.body = {
-        text: `You have added ${inputBody.header} to the Database`,
+        text: `You have added ${header} to the Database`,
       };
       console.log("Finished input test", ctx.response);
       return ctx.response;
     }
   },
   readFromDb: async ctx => {
-    const url = "mongodb://localhost:27017/lutra";
     try {
+      const url = "mongodb://localhost:27017/lutra";
       const db = await Mongodb.connect(url);
       const Lutra = db.collection("lutra");
       const data = await Lutra.find({}).toArray();
@@ -42,8 +41,58 @@ module.exports = {
     } finally {
       ctx.response.status = 200;
       ctx.response.type = "application/json";
-      console.log("Finished input test", ctx.response);
+      console.log("Finished read test", ctx.response);
       return ctx.response;
     }
   },
+  createUser: async ctx => {
+    try {
+      const url = "mongodb://localhost:27017/lutra";
+      const db = await Mongodb.connect(url);
+
+      // roles: ["readWrite","dbAdmin"]
+
+      const user = ctx.request.body.name;
+      const pwd = ctx.request.body.pwd;
+      const roles = ctx.request.body.roles;
+
+      console.log({ user, pwd, roles });
+
+      db.addUser(user, pwd, roles);
+
+      if(db.auth(user, pwd)) {
+        ctx.response.status = 200;
+        console.log('success');
+      } else {
+        throw "User creation failed"
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  },
+  writeDbEncrypt: async ctx => {
+    try {
+      const header = ctx.request.body.header;
+      const message = ctx.request.body.txt;
+
+      const user = ctx.request.body.name;
+      const pwd = ctx.request.body.pwd;
+
+      const dbInsert = {};
+      dbInsert[header] = message;
+      const url = `mongodb://${user}:${pwd}@localhost:27017/lutra`;
+      const db = await Mongodb.connect(url);
+      const Lutra = db.collection("lutra");
+      Lutra.insert(dbInsert);
+      ctx.response.status = 200;
+      ctx.response.type = "application/json";
+      ctx.response.body = {
+        text: `You have added ${header} to the Database as ${user}`,
+      };
+      console.log("Finished input test", ctx.response);
+      return ctx.response;
+    } catch (e) {
+      console.error(e);
+    }
+  }
 };
