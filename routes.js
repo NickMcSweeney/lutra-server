@@ -23,7 +23,7 @@ module.exports = {
       ctx.response.status = 200;
       ctx.response.type = "application/json";
       ctx.response.body = {
-        text: `You have added ${header} to the Database`,
+        text: `You have added ${header} to the Database`
       };
       console.log("Finished input test", ctx.response);
       return ctx.response;
@@ -60,11 +60,11 @@ module.exports = {
 
       db.addUser(user, pwd, roles);
 
-      if(db.auth(user, pwd)) {
+      if (db.auth(user, pwd)) {
         ctx.response.status = 200;
-        console.log('success');
+        console.log("success");
       } else {
-        throw "User creation failed"
+        throw "User creation failed";
       }
     } catch (e) {
       console.error(e);
@@ -72,14 +72,14 @@ module.exports = {
   },
   writeDbEncrypt: async ctx => {
     try {
-      const header = ctx.request.body.header;
-      const message = ctx.request.body.txt;
+      const itemName = ctx.request.body.itemName;
+      const itemBody = ctx.request.body.itemBody;
 
       const user = ctx.request.body.name;
       const pwd = ctx.request.body.pwd;
 
       const dbInsert = {};
-      dbInsert[header] = message;
+      dbInsert[itemName] = itemBody;
       const url = `mongodb://${user}:${pwd}@localhost:27017/lutra`;
       const db = await Mongodb.connect(url);
       const Lutra = db.collection("lutra");
@@ -87,12 +87,28 @@ module.exports = {
       ctx.response.status = 200;
       ctx.response.type = "application/json";
       ctx.response.body = {
-        text: `You have added ${header} to the Database as ${user}`,
+        text: `You have added ${itemName} to the Database as ${user}`
       };
       console.log("Finished input test", ctx.response);
       return ctx.response;
     } catch (e) {
       console.error(e);
+    }
+  },
+  getNamedData: async (ctx, item) => {
+    try {
+      const url = "mongodb://localhost:27017/lutra";
+      const db = await Mongodb.connect(url);
+      const Lutra = db.collection("lutra");
+      const data = await Lutra.find({ item }).toArray();
+      ctx.response.body = { data };
+    } catch (e) {
+      console.error(e);
+    } finally {
+      ctx.response.status = 200;
+      ctx.response.type = "application/json";
+      console.log("Finished read test", ctx.response);
+      return ctx.response;
     }
   }
 };

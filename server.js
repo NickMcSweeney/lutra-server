@@ -17,6 +17,7 @@ route.get("/readAll/", myRoutes.readFromDb);
 route.post("/createUser/", myRoutes.createUser);
 route.post("/writeDbEncrypt/", myRoutes.writeDbEncrypt);
 route.post("/writeDb/", myRoutes.addToDb);
+route.get("/getNamedData/:item", myRoutes.getNamedData);
 
 app.use(cors());
 app.use(bodyParser());

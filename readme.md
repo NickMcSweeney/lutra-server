@@ -1,4 +1,4 @@
 #Lutra server
 
 ###Start Database
-`mongod --dbpath ./db`
+`mongod --dbpath ./data/db`
