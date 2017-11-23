@@ -23,6 +23,8 @@ app.use(cors());
 app.use(bodyParser());
 app.use(route.routes());
 
+app.use(mount("/", serve("../lutris-imaginarium/dist")));
+
 // start the server
 app.listen(3001, "127.0.0.1");
 console.log("Listening at port 3001, 127.0.0.1");
