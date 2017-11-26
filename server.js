@@ -7,7 +7,8 @@ const mount = require("koa-mount");
 const assert = require("assert");
 
 const url = "mongodb://localhost:27017/lutra";
-const app = new Koa();
+const backend = new Koa();
+const frontend = new Koa();
 const route = new Router();
 
 const myRoutes = require("./routes.js");
@@ -19,12 +20,15 @@ route.post("/writeDbEncrypt/", myRoutes.writeDbEncrypt);
 route.post("/writeDb/", myRoutes.addToDb);
 route.get("/getNamedData/:item", myRoutes.getNamedData);
 
-app.use(cors());
-app.use(bodyParser());
-app.use(route.routes());
+backend.use(cors());
+backend.use(bodyParser());
+backend.use(route.routes());
 
-app.use(mount("/", serve("../lutris-imaginarium/dist")));
+frontend.use(mount("/", serve("../lutris-imaginarium/dist")));
 
 // start the server
-app.listen(3001, "127.0.0.1");
-console.log("Listening at port 3001, 127.0.0.1");
+backend.listen(3001, "127.0.0.1");
+console.log("Backend Listening at port 3001, 127.0.0.1");
+
+frontend.listen(3003, "127.0.0.1");
+console.log("Frontend listening at port 3003, 127.0.0.1");
