@@ -27,8 +27,8 @@ backend.use(route.routes());
 frontend.use(mount("/", serve("../lutris-imaginarium/dist")));
 
 // start the server
-backend.listen(3001, "127.0.0.1");
+backend.listen(3003, "127.0.0.1");
 console.log("Backend Listening at port 3001, 127.0.0.1");
 
-frontend.listen(3003, "127.0.0.1");
+frontend.listen(3001, "127.0.0.1");
 console.log("Frontend listening at port 3003, 127.0.0.1");
