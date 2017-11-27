@@ -38,6 +38,7 @@ jspm_packages/
 data/
 data/db/
 data/db/*
+cert/*
 
 # Typescript v1 declaration files
 typings/
