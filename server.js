@@ -13,14 +13,18 @@ const route = new Router();
 
 const myRoutes = require("./routes.js");
 
+route.post("/login/", myRoutes.login);
+route.post("/verifyToken/", myRoutes.verifyToken);
+route.post("/blog/addItem", myRoutes.saveEntry);
+route.get("/blog/listItems", myRoutes.listBlogItems);
+
 route.get("/test/", myRoutes.test);
 route.get("/readAll/", myRoutes.readFromDb);
 route.get("/getNamedData/:item", myRoutes.getNamedData);
+
 route.post("/createUser/", myRoutes.createUser);
 route.post("/writeDbEncrypt/", myRoutes.writeDbEncrypt);
 route.post("/writeDb/", myRoutes.addToDb);
-route.post("/login/", myRoutes.login);
-route.post("/verifyToken/", myRoutes.verifyToken);
 
 backend.use(cors());
 backend.use(bodyParser());
