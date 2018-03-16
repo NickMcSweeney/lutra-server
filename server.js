@@ -19,7 +19,7 @@ route.post("/blog/addItem", myRoutes.saveEntry);
 route.post("/blog/getItem", myRoutes.getItem);
 route.get("/blog/listItems", myRoutes.listBlogItems);
 
-// route.get("/test/", myRoutes.test);
+route.get("/test/", myRoutes.test);
 // route.get("/readAll/", myRoutes.readFromDb);
 // route.get("/getNamedData/:item", myRoutes.getNamedData);
 //
@@ -37,5 +37,5 @@ frontend.use(mount("/", serve("../lutris-imaginarium/dist")));
 backend.listen(3003, "127.0.0.1");
 console.log("Backend Listening at port 3003, 127.0.0.1");
 
-frontend.listen(3001, "127.0.0.1");
+// frontend.listen(3001, "127.0.0.1");
 console.log("Frontend listening at port 3001, 127.0.0.1");
